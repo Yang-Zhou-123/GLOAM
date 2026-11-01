@@ -6,7 +6,7 @@ from pathlib import Path
 from world import World
 from portal import Portal
 from opening import show_opening
-from ending import show_ending
+from ending import show_ending, show_boss_defeated
 
 pygame.init()
 
@@ -322,8 +322,12 @@ while running:
                 choosing_upgrade = True
                 upgrade_choices = random.sample(upgrade_pool, 3)
 
-    # Show the ending after defeating the enraged boss
     if victory:
+        # Show the defeat message before the ending image
+        if not show_boss_defeated(screen):
+            running = False
+            break
+
         action = show_ending(screen)
 
         if action == "quit":

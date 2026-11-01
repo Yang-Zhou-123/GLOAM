@@ -1,7 +1,6 @@
 import pygame
 from pathlib import Path
 
-
 def show_ending(screen):
     # Load the ending image and preserve its proportions
     image_path = Path(__file__).parent / "images" / "ending.png"
@@ -43,3 +42,37 @@ def show_ending(screen):
 
         pygame.display.flip()
         clock.tick(60)
+
+def show_boss_defeated(screen):
+    # Keep the current game scene behind the message
+    background = screen.copy()
+
+    shade = pygame.Surface(screen.get_size(), pygame.SRCALPHA)
+    shade.fill((0, 0, 0, 150))
+
+    font = pygame.font.Font(None, 80)
+    text = font.render(
+        "BOSS DEFEATED!", True, (255, 245, 220)
+    )
+    text_rect = text.get_rect(center=screen.get_rect().center)
+
+    start_time = pygame.time.get_ticks()
+    clock = pygame.time.Clock()
+
+    # Display the message for two seconds
+    while pygame.time.get_ticks() - start_time < 2000:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return False
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    return False
+
+        screen.blit(background, (0, 0))
+        screen.blit(shade, (0, 0))
+        screen.blit(text, text_rect)
+
+        pygame.display.flip()
+        clock.tick(60)
+
+    return True
